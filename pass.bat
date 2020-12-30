@@ -45,13 +45,13 @@ IF ["%1"] EQU ["init"] (
 		
 	) ELSE (
 		md "%PASSWORD_STORE_DIR%\%~1\.extensions"
-		echo.%PASSWORD_STORE_KEY%>%PASSWORD_STORE_DIR%\%~1\.gpg-id"
+		echo.%PASSWORD_STORE_KEY%>"%PASSWORD_STORE_DIR%\%~1\.gpg-id"
 	)
 	goto :eof
 )
 
 IF ["%1"] EQU ["ls"] (
-	tree /F %PASSWORD_STORE_DIR%
+	tree /F "%PASSWORD_STORE_DIR%"
 	goto :eof
 )
 
