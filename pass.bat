@@ -1,4 +1,12 @@
 @echo off
+
+where gpg.exe >nul 2>nul
+
+IF NOT ERRORLEVEL 0 (
+    echo GPG isn't installed. Exiting...
+    exit 1
+)
+
 for /F "tokens=1,* delims=:" %%a in ('chcp') do set ORIGCP=%%b
 set tmpfile="%TMP%\temppass.txt"
 
