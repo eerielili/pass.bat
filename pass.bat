@@ -14,11 +14,12 @@ IF NOT DEFINED PASSWORD_STORE_DIR (
 	echo.PASSWORD_STORE_DIR system variable not defined, defaulting to "%USERPROFILE%\.password-store\"
 	echo.You can change this sysvar anytime in SystemPropertiesAdvanced.exe or via setx. See setx/? for help.
 	set PASSWORD_STORE_DIR="%USERPROFILE%\.password-store"
-	setx PASSWORD_STORE_DIR "%USERPROFILE%\.password-store"
+	::setx PASSWORD_STORE_DIR "%USERPROFILE%\.password-store"
 )
 
 IF [%~1] EQU [] (
-	echo.Copyright ^(c^) 2019, Miquel Lionel
+    echo.Copyright ^(c^) 2012-2018, Jason A. Donenfeld ^<Jason@zx2c4.com^> 
+	echo.Copyright ^(c^) 2019-2020, Miquel Lionel
 	echo.
 	echo.Here's the available parameters for pass. Text between [] is MANDATORY:
 	echo.
@@ -34,6 +35,7 @@ IF [%~1] EQU [] (
         echo.ENVIRONNEMENT VARIABLES:
         echo.   PASSWORD_STORE_KEY    The key^(s^) ID in 0xlong form. Can alternatively be in a .gpg-id file in the password store directory, searches in it by default.
 	echo.   PASSWORD_STORE_DIR    The directory which contains the password, with .gpg extension.
+    echo.   PASSWORD_STORE_CLIP_TIME    The time remaining for which a password copied to the clipboard.
 
 )
 
