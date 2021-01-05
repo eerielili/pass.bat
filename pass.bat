@@ -1,14 +1,14 @@
 @echo off
 
 where gpg.exe >nul 2>nul
-
 IF NOT ERRORLEVEL 0 (
     echo GPG isn't installed. Exiting...
     exit 1
 )
 
 for /F "tokens=1,* delims=:" %%a in ('chcp') do set ORIGCP=%%b
-set tmpfile="%TMP%\temppass.txt"
+set tmpfile="%TMP%\pass-%RANDOM%%RANDOM%.txt"
+set GPG_OPTS="%PASSWORD_STORE_GPG_OPTS% --quiet --yes --compress-algo=none --no-encrypt-to --batch --use-agent"
 
 IF NOT DEFINED PASSWORD_STORE_CLIP_TIME (
     set PASSWORD_STORE_CLIP_TIME=45
@@ -29,21 +29,22 @@ IF [%~1] EQU [] (
     echo.Copyright ^(c^) 2012-2018, Jason A. Donenfeld ^<Jason@zx2c4.com^> 
 	echo.Copyright ^(c^) 2019-2020, Miquel Lionel
 	echo.
-	echo.Here's the available parameters for pass. Text between [] is MANDATORY:
+	echo.Here's the available parameters for pass. Params between [] are MANDATORY:
 	echo.
 	echo.  ls - without arguments, it list the entire password store as a tree.
-	echo.  view [passname] - decrypt the password with name [passname], output the result to the console
+	echo.  show [passname] - decrypt the password with name [passname], output the result to the console
 	echo.  insert [passname] - insert a password with name [passname], prompt for input. Stop and save with a newline and by pressing Ctrl+Z on your keyboard.
 	echo.  rm [passname] - delete the password matching [passname]. Prompts for confirmation.
 	echo.  rmf [passname] - force the deletion of password matching [passname].
 	echo.  rmrf [passname] - recursively and forcefully delete a directory in the password store.
 	echo.  clip [passname] [linenumber] - copy into the clipboard the text at line [linenumber] for password matching [passname].
 
-        echo.
-        echo.ENVIRONNEMENT VARIABLES:
-        echo.   PASSWORD_STORE_KEY    The key^(s^) ID in 0xlong form. Can alternatively be in a .gpg-id file in the password store directory, searches in it by default.
-	echo.   PASSWORD_STORE_DIR    The directory which contains the password, with .gpg extension.
+    echo.
+    echo.ENVIRONNEMENT VARIABLES:
+    echo.   PASSWORD_STORE_KEY    The key^(s^) ID in 0xlong form. Can alternatively be in a .gpg-id file in the password store directory, searches in it by default.
+	echo.   PASSWORD_STORE_DIR    The directory which contains the password, with .gpg %GPG_OPTS% extension.
     echo.   PASSWORD_STORE_CLIP_TIME    The time remaining for which a password copied to the clipboard.
+    echo.   PASSWORD_STORE_GPG_OPTS     Additional options to be passed to all invocations of GPG.
 
 )
 
@@ -65,17 +66,17 @@ IF ["%1"] EQU ["ls"] (
 	goto :eof
 )
 
-IF ["%1"] EQU ["view"] (
+IF ["%1"] EQU ["show"] (
         :: remove 2>nul for debug info
         chcp 65001 >nul
-	gpg --default-key %PASSWORD_STORE_KEY% -d "%PASSWORD_STORE_DIR%\%~2.gpg" 2>nul
+	gpg %GPG_OPTS% --default-key %PASSWORD_STORE_KEY% -d "%PASSWORD_STORE_DIR%\%~2.gpg"
         chcp %ORIGCP% >nul
 	goto :eof
 )
 
 IF ["%1"] EQU ["insert"] (
 	shift
-	gpg -r %PASSWORD_STORE_KEY% -e -a -o "%PASSWORD_STORE_DIR%\%~2.gpg"
+	gpg %GPG_OPTS% -r %PASSWORD_STORE_KEY% -e -a -o "%PASSWORD_STORE_DIR%\%~2.gpg"
 	goto :eof
 
 )
@@ -117,7 +118,8 @@ IF ["%1"] EQU ["rmrf"] (
 IF ["%1"] EQU ["mv"] (
 	shift
 	IF NOT ["%~2"] EQU [] (
-		move "%PASSWORD_STORE_DIR%\%~2.gpg" "%PASSWORD_STORE_DIR%\%~3.gpg"
+		move "%PASSWORD_STORE_DIR%\%~2.gpg" "%PASSWORD_STORE_DIR%\%~3.gpg" >nul
+        echo."%PASSWORD_STORE_DIR%\%~2.gpg" -^> "%PASSWORD_STORE_DIR%\%~3.gpg"
 	)
 	goto :eof
 
@@ -127,15 +129,14 @@ IF ["%1"] EQU ["clip"] (
     shift
     set LINENUMBER=%~3
     if defined LINENUMBER (
-	echo hoo
-        for /F "tokens=1,2* delims=:" %%a in ('chcp 65001 ^>nul ^&^& pass view "%~2" ^| findstr/n ^^^^ ^| findstr /i /b "%~3:" ^&^& chcp %ORIGCP% ^>nul') do (
+        for /F "tokens=1,2* delims=:" %%a in ('chcp 65001 ^>nul ^&^& pass show "%~2" ^| findstr/n ^^^^ ^| findstr /i /b "%~3:" ^&^& chcp %ORIGCP% ^>nul') do (
             echo.%%b|clip
-	    start /MIN /B "" "cmd /c ping ::1 -n %PASSWORD_STORE_CLIP_TIME% >nul && cmd /c echo.|C:\Windows\System32\clip.exe"
+	        start /MIN /B "" "cmd /c ping ::1 -n %PASSWORD_STORE_CLIP_TIME% >nul && cmd /c echo.|C:\Windows\System32\clip.exe"
         )
     ) else (
-        for /F "tokens=1,2* delims=:" %%a in ('chcp 65001 ^>nul ^&^& pass view "%~2" ^| findstr/n ^^^^ ^| findstr /i /b "1:" ^&^& chcp %ORIGCP% ^>nul') do (
+        for /F "tokens=1,2* delims=:" %%a in ('chcp 65001 ^>nul ^&^& pass show "%~2" ^| findstr/n ^^^^ ^| findstr /i /b "1:" ^&^& chcp %ORIGCP% ^>nul') do (
             echo.%%b|clip
-	    start /MIN /B "" "cmd /c ping ::1 -n %PASSWORD_STORE_CLIP_TIME% >nul && cmd /c echo.|C:\Windows\System32\clip.exe"
+	        start /MIN /B "" "cmd /c ping ::1 -n %PASSWORD_STORE_CLIP_TIME% >nul && cmd /c echo.|C:\Windows\System32\clip.exe"
         )
     )
     goto :eof
@@ -144,15 +145,15 @@ IF ["%1"] EQU ["clip"] (
 
 IF ["%1"] EQU ["edit"] (
     shift
-    gpg -o %tmpfile% -d "%PASSWORD_STORE_DIR%\%~2.gpg"
+    gpg %GPG_OPTS% -o %tmpfile% -d "%PASSWORD_STORE_DIR%\%~2.gpg"
     start /W "" notepad %tmpfile%
-    gpg -r %PASSWORD_STORE_KEY% -e -a -o "%PASSWORD_STORE_DIR%\%~2.gpg" %tmpfile%
+    gpg %GPG_OPTS% -r %PASSWORD_STORE_KEY% -e -a -o "%PASSWORD_STORE_DIR%\%~2.gpg" %tmpfile%
     del /Q %tmpfile%
     goto :eof
 )
 
 IF EXIST "%PASSWORD_STORE_DIR%\%~1.gpg" (
-    pass view "%~1"
+    pass show "%~1"
     goto :eof
 )
 
