@@ -1,7 +1,7 @@
 @echo off
 
 where gpg.exe >nul 2>nul
-IF NOT ERRORLEVEL 0 (
+IF NOT %ERRORLEVEL% EQU 0 (
     echo GPG isn't installed. Exiting...
     exit 1
 )
