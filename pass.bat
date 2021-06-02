@@ -27,7 +27,7 @@ IF NOT DEFINED PASSWORD_STORE_DIR (
 
 IF [%~1] EQU [] (
     echo.Copyright ^(c^) 2012-2018, Jason A. Donenfeld ^<Jason@zx2c4.com^> 
-	echo.Copyright ^(c^) 2019-2020, Miquel Lionel
+	echo.Copyright ^(c^) 2019-2021, Miquel Lionel
 	echo.
 	echo.Here's the available parameters for pass. Params between [] are MANDATORY:
 	echo.
