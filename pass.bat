@@ -3,7 +3,7 @@
 where gpg.exe >nul 2>nul
 IF NOT %ERRORLEVEL% EQU 0 (
     echo GPG isn't installed. Exiting...
-    exit 1
+    exit /B 1
 )
 
 for /F "tokens=1,* delims=:" %%a in ('chcp') do set ORIGCP=%%b
