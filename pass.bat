@@ -17,7 +17,7 @@ IF ["%~1"] EQU ["help"] (
     echo.
     echo.ENVIRONNEMENT VARIABLES:
     echo.   PASSWORD_STORE_KEY    The key^(s^) ID in 0xlong form. Can alternatively be in a .gpg-id file in the password store directory, searches in it by default.
-	echo.   PASSWORD_STORE_DIR    The directory which contains the password, with .gpg %GPG_OPTS% extension.
+    echo.   PASSWORD_STORE_DIR    The directory which contains the password, with .gpg %GPG_OPTS% extension.
     echo.   PASSWORD_STORE_CLIP_TIME    The time remaining for which a password copied to the clipboard.
     echo.   PASSWORD_STORE_GPG_OPTS     Additional options to be passed to all invocations of GPG.
     echo.
