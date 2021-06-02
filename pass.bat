@@ -2,17 +2,17 @@
 
 IF ["%~1"] EQU ["help"] (
     echo.Copyright ^(c^) 2012-2018, Jason A. Donenfeld ^<Jason@zx2c4.com^> 
-	echo.Copyright ^(c^) 2019-2021, Miquel Lionel
-	echo.
-	echo.Here's the available parameters for pass. Params between [] are MANDATORY:
-	echo.
-	echo.  ls - without arguments, it list the entire password store as a tree.
-	echo.  show [passname] - decrypt the password with name [passname], output the result to the console
-	echo.  insert [passname] - insert a password with name [passname], prompt for input. Stop and save with a newline and by pressing Ctrl+Z on your keyboard.
-	echo.  rm [passname] - delete the password matching [passname]. Prompts for confirmation.
-	echo.  rmf [passname] - force the deletion of password matching [passname].
-	echo.  rmrf [passname] - recursively and forcefully delete a directory in the password store.
-	echo.  clip [passname] [linenumber] - copy into the clipboard the text at line [linenumber] for password matching [passname].
+    echo.Copyright ^(c^) 2019-2021, Miquel Lionel
+    echo.
+    echo.Here's the available parameters for pass. Params between [] are MANDATORY:
+    echo.
+    echo.  ls - without arguments, it list the entire password store as a tree.
+    echo.  show [passname] - decrypt the password with name [passname], output the result to the console
+    echo.  insert [passname] - insert a password with name [passname], prompt for input. Stop and save with a newline and by pressing Ctrl+Z on your keyboard.
+    echo.  rm [passname] - delete the password matching [passname]. Prompts for confirmation.
+    echo.  rmf [passname] - force the deletion of password matching [passname].
+    echo.  rmrf [passname] - recursively and forcefully delete a directory in the password store.
+    echo.  clip [passname] [linenumber] - copy into the clipboard the text at line [linenumber] for password matching [passname].
     echo.
     echo.
     echo.ENVIRONNEMENT VARIABLES:
