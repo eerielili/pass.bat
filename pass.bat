@@ -13,14 +13,14 @@ IF ["%~1"] EQU ["help"] (
 	echo.  rmf [passname] - force the deletion of password matching [passname].
 	echo.  rmrf [passname] - recursively and forcefully delete a directory in the password store.
 	echo.  clip [passname] [linenumber] - copy into the clipboard the text at line [linenumber] for password matching [passname].
-
+    echo.
     echo.
     echo.ENVIRONNEMENT VARIABLES:
     echo.   PASSWORD_STORE_KEY    The key^(s^) ID in 0xlong form. Can alternatively be in a .gpg-id file in the password store directory, searches in it by default.
 	echo.   PASSWORD_STORE_DIR    The directory which contains the password, with .gpg %GPG_OPTS% extension.
     echo.   PASSWORD_STORE_CLIP_TIME    The time remaining for which a password copied to the clipboard.
     echo.   PASSWORD_STORE_GPG_OPTS     Additional options to be passed to all invocations of GPG.
-
+    echo.
 )
 
 where gpg.exe >nul 2>nul
