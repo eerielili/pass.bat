@@ -11,7 +11,7 @@
 :: GNU General Public License for more details.
 
 :: You should have received a copy of the GNU General Public License
-:: along with this program.  If not, see <https://www.gnu.org/licenses/>.
+:: along with this program.  If not, see ^<https://www.gnu.org/licenses/^>.
 
 ::Copyright ^(c^) 2012-2018, Jason A. Donenfeld ^<Jason@zx2c4.com^> 
 ::Copyright ^(c^) 2019-2021, Miquel Lionel
