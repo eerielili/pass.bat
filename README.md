@@ -5,3 +5,11 @@ pass.bat is an attempt to port the [pass](https://passwordstore.org) utility to 
 # how do i use it
 
 Type `pass help`.
+
+# how can i reach you for a patch
+
+file a pr or [look here for my contact info](https://partage.les-miquelots.net/engver/about).
+
+# LICENCE
+
+this script is licensed under the GPLv3+
